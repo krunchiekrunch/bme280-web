@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Climate Sensor</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      background: #0f0f11;
+      color: #e5e5e7;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .content {
+      padding: 2rem;
+      line-height: 1.6;
+    }
+
+    h1 {
+      color: #7aa7ff;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+
+    p {
+      font-size: 1.25rem;
+      margin: 0.3rem 0;
+    }
+
+    strong {
+      color: #9cb4ff;
+      font-weight: 500;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="content">
+    <h1>Climate Sensor</h1>
+
+    <p><strong>Temperature:</strong> <span id="temp">--</span> °C</p>
+    <p><strong>Humidity:</strong> <span id="hum">--</span> %</p>
+    <p><strong>Pressure:</strong> <span id="press">--</span> hPa</p>
+    <p><strong>Last Updated:</strong> <span id="time">--</span></p>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    const tempEl = document.getElementById("temp");
+    const humEl = document.getElementById("hum");
+    const pressEl = document.getElementById("press");
+    const timeEl = document.getElementById("time");
+
+    socket.on("sensorData", (d) => {
+      tempEl.textContent = d.temperature;
+      humEl.textContent = d.humidity;
+      pressEl.textContent = d.pressure;
+
+      const dt = new Date(d.updated_at);
+      const pad = n => String(n).padStart(2, "0");
+
+      const formatted =
+        pad(dt.getDate()) + "/" +
+        pad(dt.getMonth() + 1) + "/" +
+        dt.getFullYear() + " " +
+        pad(dt.getHours()) + ":" +
+        pad(dt.getMinutes()) + ":" +
+        pad(dt.getSeconds());
+
+      timeEl.textContent = formatted;
+    });
+  </script>
+</body>
+</html>

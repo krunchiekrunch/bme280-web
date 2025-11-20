@@ -1,0 +1,11 @@
+{
+  "name": "bme280-web",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "module",
+  "dependencies": {
+    "bme280": "^2.1.1",
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1"
+  }
+}
